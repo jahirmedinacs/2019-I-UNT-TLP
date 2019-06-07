@@ -37,6 +37,7 @@ include_once "./db.php";
         <a href="./admin.php?option=3" class="collection-item">Modificar Usuario</a>
         <a href="./admin.php?option=4" class="collection-item">Modificar Curso</a>
         <a href="./admin.php?option=5" class="collection-item">Realizar Matricula</a>
+        <a href="./admin.php?option=0" class="collection-item">Salir</a>
         </div>
         
         <center>
@@ -51,13 +52,29 @@ include_once "./db.php";
         $option = $_GET["option"];
         
         switch ($option) {
+            case 0:
+            ?>
+            <?php
+            session_destroy();
+            ?>
+            <center>
+                <h3>Adios</h3>
+            </center>
+            <script>
+            var timer = setTimeout(function() {
+                window.location='../index.php'
+            }, 1000);
+            </script>
+            <?php
+                break;
             case 1:
         ?>
+
 <div class="row">
-    <form class="col s12">
+    <form class="col s12" action="" method="post">
         <div class="row">
             <div class="input-field col s5">
-            <input placeholder="Codigo" id="codigo" type="text" class="validate">
+            <input placeholder="Codigo" name="codigo" id="codigo" type="text" class="validate">
             <label for="codigo">Codigo</label>
             </div>
         </div>
@@ -65,54 +82,99 @@ include_once "./db.php";
             <div class="input-field col s4">
             </div>
             <div class="input-field col s4">
-            <input placeholder="Usuario" id="userid" type="password" class="validate">
+            <input placeholder="Usuario" name="userid" id="userid" type="password" class="validate">
             <label for="userid">Usuario</label>
             </div>
             <div class="input-field col s4">
-            <input placeholder="Clave" id="password" type="password" class="validate">
+            <input placeholder="Clave" name="password" id="password" type="password" class="validate">
             <label for="password">Clave</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-            <input placeholder="Primer Nombre" id="first_name" type="text" class="validate" requierd>
+            <input placeholder="Primer Nombre" name="nombre1" id="first_name" type="text" class="validate" requierd>
             <label for="first_name">Primer Nombre</label>
             </div>
             <div class="input-field col s6">
-            <input placeholder="Primer Apellido" id="last_name" type="text" class="validate" requierd>
+            <input placeholder="Primer Apellido" name="apellido1" id="last_name" type="text" class="validate" requierd>
             <label for="last_name">Primer Apellido</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-            <input placeholder="Segundo Nombre" id="second_name" type="text" class="validate">
+            <input placeholder="Segundo Nombre" name="nombre2" id="second_name" type="text" class="validate">
             <label for="second_name">Segundo Nombre</label>
             </div>
             <div class="input-field col s6">
-            <input placeholder="Segundo Apellido"id="second_last_name" type="text" class="validate">
+            <input placeholder="Segundo Apellido" name="apellido2" id="second_last_name" type="text" class="validate">
             <label for="second_last_name">Segundo Apellido</label>
             </div>
         </div>
         <div class="row">
-        <div class="col s3">
-            <label>Fecha de Nacimiento</label>
-            <input type="date" name="fecha" class="datepicker" value="2001-09-11">
+            <div class="col s3">
+                <label>Fecha de Nacimiento</label>
+                <input type="date" name="fecha" class="datepicker" value="2001-09-11">
+            </div>
+            <div class="col s2"></div>
+            <div class="col s3">
+                <label>Tipo de Cuenta</label>
+                </br>
+                <select name="tipo" class="browser-default">
+                    <option value="" disabled selected>Selecciona un Tipo de Usuario</option>
+                    <option value="1">Alumno</option>
+                    <option value="2">Profesor</option>
+                    <option value="3">Administrador</option>
+                </select>
+            </div>
         </div>
-        <div class="col s2">
-        </div>
-        <div class="col s3">
-            <label>Tipo de Cuenta</label>
-            </br>
-            <select class="browser-default">
-                <option value="" disabled selected>Selecciona un Tipo de Usuario</option>
-                <option value="1">Alumno</option>
-                <option value="2">Profesor</option>
-                <option value="3">Administrador</option>
-            </select>
-        </div>
+        <div class="row">
+            <div class="col s6"></div>
+            <div class="col s3">
+                <a href="./admin.php" class="button">Cancelar</a>
+            </div>
+            <div class="col s3">
+                <input type="submit" name="addusuario"/>
+            </div>
         </div>
     </form>
 </div>
+<?php
+if(isset($_POST['addusuario'])){
+    $querystr = "INSERT INTO usuario(nombre, codigo, primerapellido, segundoapellido, segundonombre, nacimiento, tipo, userid) VALUES
+	(?, ?, ?, ?, ?, ?, ?, ?);";
+    $query_vars = [$_POST["nombre1"], $_POST["codigo"], $_POST["apellido1"], $_POST["apellido2"], $_POST["nombre2"], $_POST["fecha"], $_POST["tipo"], $_POST["userid"]];
+    $sentencia = $base_de_datos->prepare($querystr);
+    $estado =  $sentencia->execute($query_vars);
+    if($estado){
+        $querystr="CREATE USER '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."';";
+        $sentencia = $base_de_datos->prepare($querystr);
+        $is_done1 = $sentencia->execute($query_vars);
+        
+        $querystr="GRANT ALL PRIVILEGES ON * . * TO '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."' WITH GRANT OPTION;";
+        $sentencia = $base_de_datos->prepare($querystr);
+        $is_done2 = $sentencia->execute($query_vars);
+
+        $querystr="GRANT CREATE USER on *.* TO '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."' WITH GRANT OPTION;";
+        $sentencia = $base_de_datos->prepare($querystr);
+        $is_done3 = $sentencia->execute($query_vars);
+        
+        if($is_done1 && $is_done2 && $is_done3)
+        {
+            $base_de_datos->prepare("FLUSH PRIVILEGES;")->execute();
+        echo "<p style=\"color:green;\">Usuario nuevo agregado exitosamente</p>";
+        }
+        else{
+            echo "<p style=\"color:red;\">Error al generar privilegios</p>";
+        }
+        
+    }
+    else{
+        echo "<p style=\"color:red;\">Error al guardar usuario nuevo</p>";
+    }
+}
+
+?>
+
                 <?php
                 break;
             case 2:

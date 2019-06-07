@@ -2,14 +2,14 @@ drop database if exists registroNotas;
 create database registroNotas;
 use registroNotas;
 CREATE TABLE curso(
-  id INT(11) NOT NULL,
+  id INT(11) NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(20) NOT NULL,
   n_horas INT(11) NOT NULL,
   creditos INT(2) NOT NULL,
   PRIMARY KEY (id));
 
 CREATE TABLE usuario (
-  id INT(11) NOT NULL,
+  id INT(11) NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(45) NOT NULL,
   codigo INT(11) NOT NULL,
   primerapellido VARCHAR(45) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE matricula (
 );
   
 CREATE TABLE nota(
-  id INT(11) NOT NULL,
+  id INT(11) NOT NULL AUTO_INCREMENT,
   notas INT(11) NOT NULL,
   primerarevision boolean NULL,
   segundaversion boolean NULL,
@@ -64,7 +64,7 @@ CREATE TABLE reporte (
 );
 
 CREATE TABLE registroGeneral (
-  id INT(11) NOT NULL,
+  id INT(11) NOT NULL AUTO_INCREMENT,
   curso_id INT(11) NOT NULL,
   nota_id INT(11) NOT NULL,
   usuario_id INT(11) NOT NULL,
