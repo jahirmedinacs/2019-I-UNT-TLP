@@ -140,6 +140,8 @@ include_once "./db.php";
 </div>
 <?php
 if(isset($_POST['addusuario'])){
+    $base_de_datos->beginTransaction();
+
     $querystr = "INSERT INTO usuario(nombre, codigo, primerapellido, segundoapellido, segundonombre, nacimiento, tipo, userid) VALUES
 	(?, ?, ?, ?, ?, ?, ?, ?);";
     $query_vars = [$_POST["nombre1"], $_POST["codigo"], $_POST["apellido1"], $_POST["apellido2"], $_POST["nombre2"], $_POST["fecha"], $_POST["tipo"], $_POST["userid"]];
@@ -158,13 +160,28 @@ if(isset($_POST['addusuario'])){
         $sentencia = $base_de_datos->prepare($querystr);
         $is_done3 = $sentencia->execute($query_vars);
         
-        if($is_done1 && $is_done2 && $is_done3)
-        {
+        echo "$is_done1   $is_done2   $is_done3";
+
+        if($is_done1 && $is_done2 && $is_done3){
+            $base_de_datos->commit();
+
             $base_de_datos->prepare("FLUSH PRIVILEGES;")->execute();
-        echo "<p style=\"color:green;\">Usuario nuevo agregado exitosamente</p>";
+            
+            echo "<center>
+            </br>
+            </br>
+            <p style=\"color:green;\">Usuario nuevo agregado exitosamente</p>
+            </center>";
         }
         else{
-            echo "<p style=\"color:red;\">Error al generar privilegios</p>";
+            
+            $base_de_datos->rollBack();
+
+            echo "<center>
+            </br>
+            </br>
+            <p style=\"color:red;\">Error al generar privilegios</p>
+            </center>";
         }
         
     }
