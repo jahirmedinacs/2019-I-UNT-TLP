@@ -16,6 +16,7 @@ CREATE TABLE usuario (
   segundoapellido VARCHAR(45) NULL,
   segundonombre VARCHAR(45) NULL,
   nacimiento DATE NOT NULL,
+  tipo INT(1) NOT NULL
   PRIMARY KEY (id));
   
 CREATE TABLE matricula (
@@ -77,9 +78,10 @@ INSERT INTO curso(id, nombre, n_horas, creditos) VALUES
     (2, 'Matematica Discreta', 72, 4),
     (3, 'Computacion Logica', 72, 4);
 INSERT INTO usuario(id, nombre, codigo, primerapellido, segundoapellido, segundonombre, nacimiento) VALUES
-	(0001, 'Carlos', 1012700315,'Rodriguez','Lujan','Alberto','1994-04-27'),
-    (0002, 'Emerson', 1012700415, 'Salinas','Grados','Jhosep', '1995-04-03'),
-    (0003, 'Alexander', 1012700515,'Miranda','Robles','Celso','1996-06-04');
+	(0001, 'Carlos', 1012700315,'Rodriguez','Lujan','Alberto','1994-04-27', 1),
+    (0002, 'Emerson', 1012700415, 'Salinas','Grados','Jhosep', '1995-04-03', 1),
+    (0003, 'Alexander', 1012700515,'Miranda','Robles','Celso','1996-06-04', 2),
+    (0004, 'Jahir', 1012700115,'Medina','Lopez','Gilberh','1994-04-27', 3);
 INSERT INTO matricula(curso_id, usuario_id, fecha, vence, activo, expulsado) VALUES
 	(1,0001,'2015-08-15','2015-12-15',TRUE,FALSE),
     (2,0001,'2015-08-15','2015-12-15',TRUE,FALSE),
@@ -105,9 +107,3 @@ INSERT INTO registroGeneral(id, curso_id, nota_id, usuario_id) VALUES
     (2,2,002,0001),
     (3,2,003,0002),
     (4,3,004,0003);
-
-
--- ESTOS SON LOS EJEMPLOS DE YAYIR NO LOS USE :)
---INSERT INTO curso VALUES (1, 'Algebra Universal', 16, DEFAULT);
-
---INSERT INTO usuario VALUES (1, 'Jahir', 1012700115, 'Medina', '', '', '1994-04-27');
