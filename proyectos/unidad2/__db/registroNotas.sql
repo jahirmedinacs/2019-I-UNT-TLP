@@ -1,4 +1,4 @@
-drop database registroNotas;
+drop database if exists registroNotas;
 create database registroNotas;
 use registroNotas;
 CREATE TABLE curso(
