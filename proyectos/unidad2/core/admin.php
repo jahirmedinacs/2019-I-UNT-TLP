@@ -82,7 +82,7 @@ include_once "./db.php";
             <div class="input-field col s4">
             </div>
             <div class="input-field col s4">
-            <input placeholder="Usuario" name="userid" id="userid" type="password" class="validate">
+            <input placeholder="Usuario" name="userid" id="userid" type="text" class="validate">
             <label for="userid">Usuario</label>
             </div>
             <div class="input-field col s4">
@@ -138,6 +138,7 @@ include_once "./db.php";
         </div>
     </form>
 </div>
+
 <?php
 if(isset($_POST['addusuario'])){
     $base_de_datos->beginTransaction();
@@ -147,20 +148,19 @@ if(isset($_POST['addusuario'])){
     $query_vars = [$_POST["nombre1"], $_POST["codigo"], $_POST["apellido1"], $_POST["apellido2"], $_POST["nombre2"], $_POST["fecha"], $_POST["tipo"], $_POST["userid"]];
     $sentencia = $base_de_datos->prepare($querystr);
     $estado =  $sentencia->execute($query_vars);
+    
     if($estado){
         $querystr="CREATE USER '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."';";
         $sentencia = $base_de_datos->prepare($querystr);
-        $is_done1 = $sentencia->execute($query_vars);
+        $is_done1 = $sentencia->execute();
         
         $querystr="GRANT ALL PRIVILEGES ON * . * TO '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."' WITH GRANT OPTION;";
         $sentencia = $base_de_datos->prepare($querystr);
-        $is_done2 = $sentencia->execute($query_vars);
+        $is_done2 = $sentencia->execute();
 
         $querystr="GRANT CREATE USER on *.* TO '".$_POST["userid"]."'@'localhost' IDENTIFIED BY '".$_POST["password"]."' WITH GRANT OPTION;";
         $sentencia = $base_de_datos->prepare($querystr);
-        $is_done3 = $sentencia->execute($query_vars);
-        
-        echo "$is_done1   $is_done2   $is_done3";
+        $is_done3 = $sentencia->execute();
 
         if($is_done1 && $is_done2 && $is_done3){
             $base_de_datos->commit();
@@ -196,7 +196,64 @@ if(isset($_POST['addusuario'])){
                 break;
             case 2:
                 ?>
-                2
+
+
+<div class="row">
+    <form class="col s12" action="" method="post">
+        <div class="row">
+            <div class="input-field col s3">
+            <input placeholder="Nombre del Curso" name="nombrecurso" id="nombrecurso" type="text" class="validate">
+            <label for="nombrecurso">Nombre del Curso</label>
+            </div>
+            <div class="input-field col s3">
+            <input placeholder="Numero de Horas" name="nrohoras" id="nrohoras" type="text" class="validate">
+            <label for="nrohoras">Numero de Horas</label>
+            </div>
+            <div class="input-field col s3">
+            <input placeholder="Creditos" name="creditos" id="creditos" type="text" class="validate">
+            <label for="creditos">Creditos</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6"></div>
+            <div class="col s3">
+                <a href="./admin.php" class="button">Cancelar</a>
+            </div>
+            <div class="col s3">
+                <input type="submit" name="addcurso"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<?php
+if(isset($_POST['addcurso'])){
+    $base_de_datos->beginTransaction();
+
+    $querystr = "INSERT INTO curso(nombre, n_horas, creditos) VALUES
+    (?, ?, ?);";    
+    $query_vars = [$_POST["nombrecurso"], $_POST["nrohoras"], $_POST["creditos"]];
+
+    $sentencia = $base_de_datos->prepare($querystr);
+    $estado =  $sentencia->execute($query_vars);
+
+    if($estado){
+        $base_de_datos->commit();
+            
+        echo "<center>
+        </br>
+        </br>
+        <p style=\"color:green;\">Curso nuevo agregado exitosamente</p>
+        </center>";
+    }
+    else{
+        $base_de_datos->rollBack();
+        echo "<p style=\"color:red;\">Error al guardar Curso nuevo</p>";
+    }
+}
+
+?>
+
                 <?php
                 break;
             case 3:

@@ -3,7 +3,7 @@ create database registroNotas;
 use registroNotas;
 CREATE TABLE curso(
   id INT(11) NOT NULL AUTO_INCREMENT,
-  nombre VARCHAR(20) NOT NULL,
+  nombre VARCHAR(50) NOT NULL,
   n_horas INT(11) NOT NULL,
   creditos INT(2) NOT NULL,
   PRIMARY KEY (id));
