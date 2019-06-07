@@ -16,7 +16,7 @@ CREATE TABLE usuario (
   segundoapellido VARCHAR(45) NULL,
   segundonombre VARCHAR(45) NULL,
   nacimiento DATE NOT NULL,
-  tipo INT(1) NOT NULL
+  tipo INT(1) NOT NULL,
   PRIMARY KEY (id));
   
 CREATE TABLE matricula (
