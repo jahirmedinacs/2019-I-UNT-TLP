@@ -197,7 +197,6 @@ if(isset($_POST['addusuario'])){
             case 2:
                 ?>
 
-
 <div class="row">
     <form class="col s12" action="" method="post">
         <div class="row">
@@ -258,7 +257,7 @@ if(isset($_POST['addcurso'])){
                 break;
             case 3:
                 ?>
-                3
+                
                 <?php
                 break;
             case 4:
