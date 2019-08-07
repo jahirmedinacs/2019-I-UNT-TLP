@@ -82,7 +82,7 @@ INSERT INTO usuario(id, nombre, codigo, primerapellido, segundoapellido, segundo
 	(0001, 'Carlos', 1012700315,'Rodriguez','Lujan','Alberto','1994-04-27', 1, 'lujan'),
     (0002, 'Emerson', 1012700415, 'Salinas','Grados','Jhosep', '1995-04-03', 1, 'salinas'),
     (0003, 'Alexander', 1012700515,'Miranda','Robles','Celso','1996-06-04', 2, 'miranda'),
-    (0004, 'Jahir', 000000000,'Medina','Lopez','Gilberh','1994-04-27', 3, 'drsavage');
+    (0004, 'Jahir', 000000000,'Medina','Lopez','Gilberh','1994-04-27', 3, 'jahirmedinacs');
 INSERT INTO matricula(curso_id, usuario_id, fecha, vence, activo, expulsado) VALUES
 	(1,0001,'2015-08-15','2015-12-15',TRUE,FALSE),
     (2,0001,'2015-08-15','2015-12-15',TRUE,FALSE),
